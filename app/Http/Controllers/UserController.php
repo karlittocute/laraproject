@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use DB;
 use App\User;
 class UserController extends Controller
@@ -36,19 +36,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-		$user = new User;
-    
-		$user->email = request('email');
-		$user->password = request('password');
-		$user->role = request('role');
-		$user->save();
+		$this->validate(request(),[
+			'role' => 'required',
+			'email'=> 'required|email',
+			'password'=> 'required|confirmed'
+		]);
 		
-		//Resume::create(request()->all()); Эта строчка будет отправлять все данные из формы в БД
-		//dd(request()->all()); //  Эта строчка выводит данные из формы на экран
+		$user = User::create(request(['email','password','role']));
+    
+		Auth::login($user);
+		
 		if (request('role') == 'applicant' ) {
 			return redirect('/resume/create');
 		}
-		else {
+		elseif (request('role') == 'company' ){
 			return redirect('/company/create');
 		}
 	}

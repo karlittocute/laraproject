@@ -22,13 +22,12 @@ class CreateResumesTable extends Migration
 			
 			// Информация о соискателе
 			$table->string('name')->nullable(); // Фамилия имя отчество пользователя
-			$table->string('userId')->nullable();// Идентификатор пользователя 
+			$table->string('user_id')->nullable();// Идентификатор пользователя 
 			$table->unsignedTinyInteger('sex')->nullable(); // Пол 
 			$table->date('bDay')->nullable(); // Дата рождения
 			$table->unsignedInteger('cityId')->nullable(); // Идентификатор город
 			$table->string('region')->nullable(); // Район проживания
 			$table->string('phone')->nullable(); // Телефон
-			$table->string('email')->nullable(); // Электропочта
 			$table->string('citizenship')->nullable(); // Гражданство
 			$table->unsignedTinyInteger('visa')->nullable();  // Прописка
 			

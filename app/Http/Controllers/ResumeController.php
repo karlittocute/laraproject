@@ -15,6 +15,11 @@ class ResumeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	public function __construct()
+	{
+		$this->middleware('auth.role:applicant')->except(['index','show']);
+	}
+	
     public function index()
     {
         $resume = Resume::orderBy('updated_at', 'desc')->get();
@@ -57,7 +62,7 @@ class ResumeController extends Controller
      */
     public function show($id)
     {
-        $resume = DB::table('resumes')->find($id);
+        $resume = Resume::find($id);
 		//dd($resume);
 		return view('pages.showresume', compact('resume'));
     }

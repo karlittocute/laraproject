@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Company;
+use app\Http\Middleware\MiddlewareCompany;
 use DB;
 
 class CompanyController extends Controller
@@ -13,6 +14,12 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	 
+	public function __construct()
+	{
+		$this->middleware('auth.role:company')->except(['index','show']);
+	}
+	
     public function index()
     {
         $companies = DB::table('companies')->get();
@@ -37,12 +44,16 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $company = new Company;
+		auth()->user()->new_company(
+			new Company($request[('name','phone')])
+		);
+        //$company = new Company;
+		//$user['user_id'] = auth()->id();
+		//$new = $user + $request;
+		dd($request->all());
+        //Company::create($request->all());
 
-        Company::create(request(['name', 'field', 'profile', 'cityId', 'address', 'persons', 'phone',
-            'email', 'contractNumber', 'additionalInfo']));
-
-        return redirect('company');
+        //return redirect('company');
     }
 
     /**
@@ -53,7 +64,8 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        $company = DB::table('companies')->find($id);
+        $company = Company::find($id);
+		//DB::table('companies')->find($id);
         return view ('pages.showCompany', compact('company'));
     }
 

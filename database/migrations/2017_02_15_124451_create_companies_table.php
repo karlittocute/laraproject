@@ -15,7 +15,7 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('userId')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('filialId')->nullable();
             $table->unsignedInteger('operatorId')->nullable();
             $table->string('name');

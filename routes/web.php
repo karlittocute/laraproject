@@ -20,3 +20,8 @@ Route::resource('company','CompanyController');
 Route::resource('vacancy','VacancyController');
 Route::resource('company.vacancy','VacancyController');
 
+Route::get('/login','SessionsController@create');
+Route::post('/login','SessionsController@store');
+Route::get('/logout','SessionsController@destroy');
+
+

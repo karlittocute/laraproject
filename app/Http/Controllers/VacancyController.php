@@ -13,6 +13,11 @@ class VacancyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	public function __construct()
+	{
+		$this->middleware('auth.role:company')->except(['index','show']);
+	}
+	
     public function index()
     {
         $vacancies = DB::table('vacancies')->get();
@@ -53,7 +58,8 @@ class VacancyController extends Controller
      */
     public function show($id)
     {
-        $vacancy = DB::table('vacancies')->find($id);
+        $vacancy = Vacancy::find($id);
+		//DB::table('vacancies')->find($id);
         return view ('pages.showVacancy', compact('vacancy'));
     }
 
