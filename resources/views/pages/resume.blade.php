@@ -2,13 +2,11 @@
 
 @section('content')
 	@foreach ($resume as $resume)
-		<div class="container">
 			<a href="/resume/{{ $resume->id }}">
-				<h3>Èìÿ: {{ $resume->name }}</h2>
+				<h3>Ð˜Ð¼Ñ: {{ $resume->name }}</h2>
 			</a>
 			<p> {{ $resume->updated_at}} </p>
-			<li>Òåëåôîí: {{ $resume->phone }}</li>
+			<li>Ð¢ÐµÐ»ÐµÑ„Ð¾Ð½: {{ $resume->phone }}</li>
 			<li>Email: {{ $resume->email }}</li>
-		</div>
 	@endforeach
 @endsection

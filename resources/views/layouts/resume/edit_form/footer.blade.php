@@ -28,7 +28,7 @@
         <div class="group">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <p class="text-center"><small>
-              Нажимая кнопку &laquo;Добавить резюме&raquo;, Вы&nbsp;соглашаетесь с&nbsp;<a href="#">правилами использования сервиса</a> и&nbsp;подтверждаете, что резюме заполнено <mark>правильно</mark>, а&nbsp;информация в&nbsp;нём&nbsp;&mdash; <mark>достоверна</mark>.
+              Нажимая кнопку &laquo;Редактировать резюме&raquo;, Вы&nbsp;соглашаетесь с&nbsp;<a href="#">правилами использования сервиса</a> и&nbsp;подтверждаете, что резюме заполнено <mark>правильно</mark>, а&nbsp;информация в&nbsp;нём&nbsp;&mdash; <mark>достоверна</mark>.
             </small></p>
           </div>
         </div>
@@ -36,7 +36,7 @@
       <div class="row">
         <div class="group">
           <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-            <button type="submit" id="submitResume" name="submitResume" type="button" class="btn btn-lg btn-block btn-success"><i class="fa fa-paper-plane-o"></i> <span>Добавить резюме</span></button>
+            <button type="submit" id="submitResume" name="submitResume" type="button" class="btn btn-lg btn-block btn-success"><i class="fa fa-paper-plane-o"></i> <span>Редактировать резюме</span></button>
           </div>
         </div>
       </div>

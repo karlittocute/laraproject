@@ -16,6 +16,7 @@ class VacancyController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth.role:company')->except(['index','show']);
+		$this->middleware('existence.company')->only('create');
 	}
 	
     public function index()
@@ -42,12 +43,13 @@ class VacancyController extends Controller
      */
     public function store(Request $request)
     {
-        $vacancy = new Vacancy;
-
-        Vacancy::create(request(['name', 'place', 'ageAny', 'education', 'workExp', 'visa', 'pcLevel',
-            'eduSpec', 'notes']));
-
+		$company = auth()->user()->companies;
+		$company_id = $company->id;
+		$vacancy = new Vacancy;
+		$vacancy->new_vacancy($vacancy,$company_id,$request->all());
         return redirect('vacancy');
+		
+	
     }
 
     /**

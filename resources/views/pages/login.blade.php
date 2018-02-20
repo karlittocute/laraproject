@@ -1,19 +1,23 @@
 @extends ('layouts.layout')
 
 @section('content')
- <form id="resume" name="resume" method="POST" action="/resume">
+<div class="page-header">
+	<h1>Вход ЭМБиТ</h1>
+</div>
+ <form id="user" name="user" method="POST" action="/login">
+      <div class="container-fluid">
 	    {{ csrf_field()}} <!-- Для того что бы значть, что POST запрос идет с этого же сайта -->
-	    @include('layouts.resume.add_form.formheader')
-	    @include('layouts.resume.add_form.attendee')
-
-		
-		@include('layouts.resume.add_form.mainedu')
-		@include('layouts.resume.add_form.secedu')
-        
-		
-		 @include('layouts.resume.add_form.skills')
-		 @include('layouts.resume.add_form.vacancy')
-		 @include('layouts.resume.add_form.footer')
+		<div class="form-group">
+			<label for="email">Электронная почта<sup><i class="fa fa-asterisk" style="color: #c0392b;"></i></sup></label>
+			<input id="email" name="email" type="email" class="form-control" placeholder="kostantin@konstantinopolskiy.ru" required>
+		</div>
+		<div class="form-group">
+			<label for="password">Пароль<sup><i class="fa fa-asterisk" style="color: #c0392b;"></i></sup></label>
+			<input id="password" name="password" type="password" class="form-control" required>
+		</div>
+		<button type="submit" id="submitResume" name="submitResume" type="button" class="btn btn-lg btn-block btn-success"><i class="fa fa-paper-plane-o"></i> <span>Войти</span></button>
+          @include('layouts.errors')
+      </div>
     </form>
 
 <!-- Bootstrap core JavaScript

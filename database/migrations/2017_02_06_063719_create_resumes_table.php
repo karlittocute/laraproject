@@ -68,9 +68,9 @@ class CreateResumesTable extends Migration
 			//Прочие поля (не заполняются соискателем):
 			$table->timestamps();  // Дата заполнения / Дата изменения
 			$table->timestamp('resumeLifetime')->nullable();  // Время жизни резюме
-			$table->unsignedTinyInteger('active')->nullable(); // Статус резюме
+			$table->unsignedTinyInteger('active')->default(0); // Статус резюме
 			$table->boolean('contact')->default(1); // Контакт через оператора
-			$table->boolean('public')->nullable(); //  "Внешнее" резюме (оставленное из аккаунта соискателя)
+			$table->boolean('public')->default(1); //  Если значение равно 1, значит запись нуждается в проверке оператором
         });
     }
 

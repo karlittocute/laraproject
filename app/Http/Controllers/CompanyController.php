@@ -18,6 +18,7 @@ class CompanyController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth.role:company')->except(['index','show']);
+		$this->middleware('auth.record:companies')->only('create');
 	}
 	
     public function index()
@@ -45,15 +46,10 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
 		auth()->user()->new_company(
-			new Company($request[('name','phone')])
+			new Company($request->all([]))
 		);
-        //$company = new Company;
-		//$user['user_id'] = auth()->id();
-		//$new = $user + $request;
-		dd($request->all());
-        //Company::create($request->all());
-
-        //return redirect('company');
+		
+        return redirect('company');
     }
 
     /**

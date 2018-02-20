@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
  
 use App\Resume;
+use App\ErrorsInResume;
  
 use DB;
+
+use Illuminate\Support\Facades\Input; 
 
 class ResumeController extends Controller
 {
@@ -17,7 +20,10 @@ class ResumeController extends Controller
      */
 	public function __construct()
 	{
-		$this->middleware('auth.role:applicant')->except(['index','show']);
+		$this->middleware('auth.role:applicant')->except(['index','show','publish','deny']);
+		$this->middleware('auth.role:operator')->only('publish','deny');
+		$this->middleware('auth.record:resumes')->only('create');
+		$this->middleware('auth.access:resumes')->only('edit','update','destroy');
 	}
 	
     public function index()
@@ -25,7 +31,7 @@ class ResumeController extends Controller
         $resume = Resume::orderBy('updated_at', 'desc')->get();
 		return view('pages.resume', compact('resume'));
     }
-
+ 
     /**
      * Show the form for creating a new resource.
      *
@@ -45,13 +51,13 @@ class ResumeController extends Controller
     public function store(Request $request)
     {
 		
-        $resume = new Resume;
-    
-		//$resume->name = request('name');
-		//$resume->save();
+		auth()->user()->new_resume(
+				new Resume($request->all([]))
+			);
 		
-		Resume::create(request()->all()); //Эта строчка будет отправлять все данные из формы в БД
-		dd(request()->all()); //  Эта строчка выводит данные из формы на экран
+        return redirect('resume');
+
+		
 	}
 
     /**
@@ -75,7 +81,8 @@ class ResumeController extends Controller
      */
     public function edit($id)
     {
-        return view('welcome');
+		$resume = Resume::find($id);
+        return view('pages.editresume', compact('resume'));
     }
 
     /**
@@ -87,9 +94,47 @@ class ResumeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+		$data = $request->except(['_token','_method', 'submitResume']);
+		$resume =  Resume::find($id);
+		$resume->fill($data);
+		$resume->public = 1;
+		$resume->active = 0;
+		$resume->save();
+		
+		return redirect()->action('ResumeController@show', ['id' => $id]);
     }
-
+	
+	public function publish(Request $request, $id)
+    {
+		$resume = Resume::find($id);
+		$resume->active = 1;
+		$resume->public = 0;
+		$operator = $request->user()->operators;
+		$resume->operatorId = $operator->id;
+		$resume->save();
+		
+		return redirect()->action('ResumeController@show', ['id' => $id]);
+		  
+    }
+	
+	
+	public function deny(Request $request, $id)
+    {
+		$resume = Resume::find($id);
+		$resume->active = 2;
+		$resume->public = 1;
+		$operator = $request->user()->operators;
+		$resume->operatorId = $operator->id;
+		$resume->save();
+		
+		//если в таблице ErrorsInResume нет записи про резюме, то создается новая 
+		$error = ErrorsInResume::updateOrCreate(
+			['resume_id' => $id], 
+			['reason' => $request->reason]);
+		
+		return redirect()->action('ResumeController@show', ['id' => $id]);
+		  
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -98,6 +143,10 @@ class ResumeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $resume = Resume::find($id);
+		$resume->active = 0;
+		$resume->public = 1;
+		$resume->save();
+		return redirect()->action('ResumeController@index');
     }
 }

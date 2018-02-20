@@ -7,17 +7,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-	protected $guarded = ['user_id'];
+	protected $guarded = ['id','created_at','updated_at','_token'];
 	
 	public function resumes()
 	{
-	    return $this->hasMany(Resume::class);
+	    return $this->hasOne(Resume::class);
 	}
 	
 	public function companies()
 	{
 	    return $this->hasOne(Company::class);
 	}
+	
+	public function operators()
+	{
+	    return $this->hasOne(Operator::class);
+	}
+	
 	public function hasRole($role = null)
 	{
 		if ($role){
@@ -32,5 +38,10 @@ class User extends Authenticatable
 	public function new_company(Company $company)
 	{
 		$this->companies()->save($company);
+	}
+	
+	public function new_resume(Resume $resume)
+	{
+		$this->resumes()->save($resume);
 	}
 }

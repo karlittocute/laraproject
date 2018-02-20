@@ -163,7 +163,7 @@
                                     <div class="form-group">
                                         <label for="notes">Примечания</label> <sup><i class="fa fa-asterisk"
                                                                                       style="color: #c0392b;"></i>
-                                            <textarea id="notes" name="notes" class="form-control" rows="3" required>Примечания</textarea>
+                                            <textarea id="notes" name="notes" class="form-control" rows="3" required></textarea>
                                     </div> <!-- .form-group -->
                                 </div> <!-- .col-sm-12 -->
                             </div> <!-- .group -->

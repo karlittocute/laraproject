@@ -1,19 +1,20 @@
 @extends ('layouts.layout')
 
 @section('content')
- <form id="resume" name="resume" method="POST" action="/resume">
+ <form id="resume" name="resume" method="POST" action="/resume/{{$resume->id}}">
 	    {{ csrf_field()}} <!-- Для того что бы значть, что POST запрос идет с этого же сайта -->
-	    @include('layouts.resume.add_form.formheader')
-	    @include('layouts.resume.add_form.attendee')
+		{{ method_field('PUT') }}  <!-- Для UPDATE -->
+	    @include('layouts.resume.edit_form.formheader')
+	    @include('layouts.resume.edit_form.attendee')
 
 		
-		@include('layouts.resume.add_form.mainedu')
-		@include('layouts.resume.add_form.secedu')
+		@include('layouts.resume.edit_form.mainedu')
+		@include('layouts.resume.edit_form.secedu')
         
 		
-		 @include('layouts.resume.add_form.skills')
-		 @include('layouts.resume.add_form.vacancy')
-		 @include('layouts.resume.add_form.footer')
+		 @include('layouts.resume.edit_form.skills')
+		 @include('layouts.resume.edit_form.vacancy')
+		 @include('layouts.resume.edit_form.footer')
     </form>
 
 <!-- Bootstrap core JavaScript

@@ -18,10 +18,11 @@ Route::resource('user','UserController');
 Route::resource('resume','ResumeController');
 Route::resource('company','CompanyController');
 Route::resource('vacancy','VacancyController');
-Route::resource('company.vacancy','VacancyController');
+
 
 Route::get('/login','SessionsController@create');
 Route::post('/login','SessionsController@store');
 Route::get('/logout','SessionsController@destroy');
 
-
+Route::post('/resume/{resume}/publish','ResumeController@publish');
+Route::post('/resume/{resume}/deny','ResumeController@deny');

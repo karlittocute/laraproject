@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    protected $fillable = ['name', 'field', 'profile', 'cityId', 'address', 'persons', 'phone',
-        'email', 'contractNumber', 'additionalInfo'];
+    protected $guarded = ['id','user_id', 'operatorId','filialId','active','created_at','updated_at','_token','submit'];
 		
 	public function user()
 	{
@@ -18,4 +17,10 @@ class Company extends Model
 	{
 	    return $this->hasMany(Vacancy::class);
 	}
+	
+	public function error()
+	{
+	    return $this->hasOne(ErrorsInCompany::class);
+	}
+	
 }

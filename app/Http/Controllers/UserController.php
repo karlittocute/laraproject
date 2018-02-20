@@ -6,8 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\User;
+use App\ErrorsInResume;
+use App\Resume;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('guest')->except(['index']);
+	}
 
     /**
      * Display a listing of the resource.
@@ -15,7 +22,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {	
+		$id = Auth::user()->id;
+		$user = User::find($id);
+		//dd($user);
+		return view('pages.showuser', compact('user'));
     }
 
     /**
@@ -42,7 +53,11 @@ class UserController extends Controller
 			'password'=> 'required|confirmed'
 		]);
 		
-		$user = User::create(request(['email','password','role']));
+		$user = new User;
+		$user->email = $request->email;
+		$user->password = Hash::make($request->password);
+		$user->role = $request->role;
+		$user->save();
     
 		Auth::login($user);
 		
