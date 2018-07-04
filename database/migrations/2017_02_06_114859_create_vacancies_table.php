@@ -16,14 +16,14 @@ class CreateVacanciesTable extends Migration
         Schema::create('vacancies', function (Blueprint $table) {
             //Информация о вакансии
             $table->increments('id')->nullable();
-            $table->unsignedInteger('company_id')->nullable();
-            $table->unsignedInteger('operatorId')->nullable();
+            $table->unsignedInteger('company_id')->default(0);
+            $table->unsignedInteger('operator_id')->default(0);
             $table->string('name')->nullable();
-            $table->unsignedTinyInteger('place')->nullable();
-            $table->unsignedTinyInteger('field')->nullable();
+            $table->unsignedTinyInteger('place')->default(0);
+            $table->unsignedTinyInteger('field')->default(0);
             $table->boolean('salaryVar')->default(False);
-            $table->unsignedInteger('salaryFrom')->nullable();
-            $table->unsignedInteger('salaryTo')->nullable();
+            $table->unsignedInteger('salaryFrom')->default(0);
+            $table->unsignedInteger('salaryTo')->default(0);
             $table->string('testPeriod')->nullable();
             $table->string('schedule')->nullable();
             $table->text('reqs')->nullable();
@@ -32,24 +32,24 @@ class CreateVacanciesTable extends Migration
             $table->string('workFormDescr')->nullable(); //Дополнительное поле, описывающее разные ситуации с формой работы.
             $table->text('duties')->nullable();
             //Требования к соискателю
-            $table->unsignedTinyInteger('sex')->nullable();
+            $table->unsignedTinyInteger('sex')->default(0);
             $table->boolean('ageAny')->default(0)->nullable();
-            $table->unsignedTinyInteger('ageFrom')->nullable();
-            $table->unsignedTinyInteger('ageTo')->nullable();
+            $table->unsignedTinyInteger('ageFrom')->default(0);
+            $table->unsignedTinyInteger('ageTo')->default(0);
             $table->string('education')->nullable();
-            $table->unsignedTinyInteger('workExp')->nullable();
+            $table->unsignedTinyInteger('workExp')->default(0);
             $table->string('workExpDescr')->nullable();
             $table->string('lang')->nullable();
             $table->string('visa')->nullable();
-            $table->unsignedTinyInteger('pcLevel')->nullable();
+            $table->unsignedTinyInteger('pcLevel')->default(0);
             $table->string('eduSpec')->nullable();
             $table->text('notes')->nullable();
             //Прочие поля
-            $table->unsignedTinyInteger('active')->nullable();
+            $table->unsignedTinyInteger('active')->default(1);
             $table->timestamps();
             $table->timestamp('vacancyLifetime')->nullable();
             $table->boolean('contact')->default(1);
-            $table->boolean('public')->nullable();
+            $table->boolean('public')->default(1);
         });
     }
 

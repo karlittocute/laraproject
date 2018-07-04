@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resume extends Model
 {
-    protected $guarded = ['_token','id','filialId','operatorId','user_id','created_at','updated_at','resumeLifetime','active','contact','public', 'schedulespecial','submitResume'];
+    protected $guarded = ['_token','id','operatorId','user_id','created_at','updated_at','resumeLifetime','active','contact','public', 'schedulespecial','submitResume'];
 	
 	public function user()
 	{

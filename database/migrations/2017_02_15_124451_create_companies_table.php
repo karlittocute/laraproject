@@ -16,19 +16,19 @@ class CreateCompaniesTable extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->unique();
-            $table->unsignedInteger('filialId')->nullable();
-            $table->unsignedInteger('operatorId')->nullable();
+            $table->unsignedInteger('filial_id')->default(0);
+            $table->unsignedInteger('operator_id')->default(0);
             $table->string('name');
-            $table->unsignedTinyInteger('field');
+            $table->unsignedTinyInteger('field')->default(0);
             $table->string('profile');
-            $table->unsignedInteger('cityId');
+            $table->string('cityId');
             $table->string('address');
             $table->string('persons');
             $table->string('phone');
             $table->string('email');
-            $table->unsignedInteger('contractNumber');
+            $table->unsignedInteger('contractNumber')->default(0);
             $table->text('additionalInfo');
-            $table->unsignedTinyInteger('active')->nullable();
+            $table->unsignedTinyInteger('active')->default(1);
             $table->timestamps();
         });
     }

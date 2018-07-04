@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
  
 use App\Resume;
 use App\ErrorsInResume;
- 
+use App\Filial;
 use DB;
-
 use Illuminate\Support\Facades\Input; 
 
 class ResumeController extends Controller
@@ -20,16 +19,47 @@ class ResumeController extends Controller
      */
 	public function __construct()
 	{
+		
 		$this->middleware('auth.role:applicant')->except(['index','show','publish','deny']);
 		$this->middleware('auth.role:operator')->only('publish','deny');
-		$this->middleware('auth.record:resumes')->only('create');
+		$this->middleware('auth.record:resumes')->only('create','store');
 		$this->middleware('auth.access:resumes')->only('edit','update','destroy');
+		
 	}
 	
-    public function index()
+    public function index(Request $request)
     {
-        $resume = Resume::orderBy('updated_at', 'desc')->get();
-		return view('pages.resume', compact('resume'));
+        /*
+		$resume = Resume::orderBy('updated_at', 'desc')->get();
+		return view('pages.resume.resume', compact('resume'));
+		*/
+		if (empty($request->field) and empty($request->name)){
+			return view('pages.resume.resume', ['resumes'=> Resume::orderBy('updated_at', 'desc')->paginate(7)]);
+		}
+		else { 
+			if (empty($request->field) ){
+				$name = '%' . strval($request->name) . '%';
+				$resumes = Resume::orderBy('updated_at', 'desc')->where([
+					['vacancy', 'like', $name ]
+					])->paginate(7);
+				return view('pages.resume.resume', compact('resumes'));
+			}
+			elseif (empty($request->name) ) {
+				$name = '%' . strval($request->name) . '%';
+				$resumes = Resume::orderBy('updated_at', 'desc')->where([
+					['vacancyField', '=', $request->field ]
+					])->paginate(7);
+				return view('pages.resume.resume', compact('resumes'));
+			}
+			else {
+				$name = '%' . strval($request->name) . '%';
+				$resumes = Resume::orderBy('updated_at', 'desc')->where([
+					['vacancy', 'like', $name ],
+					['vacancyField', '=', $request->field ]
+					])->paginate(7);
+				return view('pages.resume.resume', compact('resumes'));
+			}
+		}
     }
  
     /**
@@ -39,7 +69,8 @@ class ResumeController extends Controller
      */
     public function create()
     {
-		return view('pages.createresume');
+		$filial = Filial::orderBy('updated_at', 'desc')->get();
+		return view('pages.resume.create_resume', compact('filial'));
     }
 
     /**
@@ -70,7 +101,7 @@ class ResumeController extends Controller
     {
         $resume = Resume::find($id);
 		//dd($resume);
-		return view('pages.showresume', compact('resume'));
+		return view('pages.resume.show_resume', compact('resume'));
     }
 
     /**
@@ -81,8 +112,9 @@ class ResumeController extends Controller
      */
     public function edit($id)
     {
+		$filial = Filial::orderBy('updated_at', 'desc')->get();
 		$resume = Resume::find($id);
-        return view('pages.editresume', compact('resume'));
+        return view('pages.resume.edit_resume', compact('resume','filial'));
     }
 
     /**
@@ -143,10 +175,15 @@ class ResumeController extends Controller
      */
     public function destroy($id)
     {
-        $resume = Resume::find($id);
+		$resume = Resume::find($id);
+		$resume->delete();
+		return redirect('/resume');
+        /**
+		$resume = Resume::find($id);
 		$resume->active = 0;
 		$resume->public = 1;
 		$resume->save();
 		return redirect()->action('ResumeController@index');
+		**/
     }
 }

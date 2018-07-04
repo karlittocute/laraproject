@@ -14,6 +14,7 @@ class UserController extends Controller
 	public function __construct()
 	{
 		$this->middleware('guest')->except(['index']);
+		$this->middleware('auth')->except(['create', 'store']);
 	}
 
     /**
@@ -26,7 +27,7 @@ class UserController extends Controller
 		$id = Auth::user()->id;
 		$user = User::find($id);
 		//dd($user);
-		return view('pages.showuser', compact('user'));
+		return view('pages.user.show_user', compact('user'));
     }
 
     /**
@@ -36,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-		return view('pages.createuser');
+		return view('pages.user.create_user');
     }
 
     /**

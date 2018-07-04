@@ -14,7 +14,7 @@ class SessionsController extends Controller
 	
     public function create()
     {
-		return view('pages.login');
+		return view('pages.user.login');
     }
 	public function destroy()
     {
@@ -30,6 +30,6 @@ class SessionsController extends Controller
 				'message' => 'Неверный логин или пароль.'
 				]);
 		};
-		return view('welcome');
+		return redirect('user');
     }
 }

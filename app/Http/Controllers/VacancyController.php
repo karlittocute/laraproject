@@ -19,11 +19,36 @@ class VacancyController extends Controller
 		$this->middleware('existence.company')->only('create');
 	}
 	
-    public function index()
+    public function index(Request $request)
     {
-        $vacancies = DB::table('vacancies')->get();
-        return view('pages.vacancy', compact('vacancies'));
-    }
+		if (empty($request->field) and empty($request->name)){
+			return view('pages.vacancy.vacancy', ['vacancies'=> Vacancy::orderBy('updated_at', 'desc')->paginate(7)]);
+		}
+		else { 
+			if (empty($request->field) ){
+				$name = '%' . strval($request->name) . '%';
+				$vacancies = Vacancy::where([
+					['name', 'like', $name ]
+					])->paginate(7);
+				return view('pages.vacancy.vacancy', compact('vacancies'));
+			}
+			elseif (empty($request->name) ) {
+				$name = '%' . strval($request->name) . '%';
+				$vacancies = Vacancy::orderBy('updated_at', 'desc')->where([
+					['field', '=', $request->field ]
+					])->paginate(7);
+				return view('pages.vacancy.vacancy', compact('vacancies'));
+			}
+			else {
+				$name = '%' . strval($request->name) . '%';
+				$vacancies = Vacancy::orderBy('updated_at', 'desc')->where([
+					['name', 'like', $name ],
+					['field', '=', $request->field ]
+					])->paginate(7);
+				return view('pages.vacancy.vacancy', compact('vacancies'));
+			}
+		}
+	}
 
     /**
      * Show the form for creating a new resource.
@@ -32,7 +57,7 @@ class VacancyController extends Controller
      */
     public function create()
     {
-        return view('pages.createVacancy');
+        return view('pages.vacancy.create_vacancy');
     }
 
     /**
@@ -62,7 +87,7 @@ class VacancyController extends Controller
     {
         $vacancy = Vacancy::find($id);
 		//DB::table('vacancies')->find($id);
-        return view ('pages.showVacancy', compact('vacancy'));
+        return view ('pages.vacancy.show_vacancy', compact('vacancy'));
     }
 
     /**
@@ -73,7 +98,8 @@ class VacancyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $vacancy = Vacancy::find($id);
+        return view('pages.vacancy.edit_vacancy', compact('vacancy'));
     }
 
     /**
@@ -85,7 +111,13 @@ class VacancyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->except(['_token','_method', 'submitResume']);
+		$vacancy =  Vacancy::find($id);
+		$vacancy->fill($data);
+		$vacancy->active = 1;
+		$vacancy->save();
+		
+		return redirect()->action('VacancyController@show', ['id' => $id]);
     }
 
     /**
@@ -96,6 +128,8 @@ class VacancyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vacancy = Vacancy::find($id);
+		$vacancy->delete();
+		return redirect('/vacancy');
     }
 }

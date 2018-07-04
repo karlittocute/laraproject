@@ -17,8 +17,8 @@ class CreateOperatorsTable extends Migration
 		
             $table->increments('id');
 			$table->string('user_id')->nullable();// Идентификатор пользователя 
-			$table->unsignedInteger('filialId')->nullable(); // Код филиала
-			$table->boolean('publicResponsibility'); // Ответственный за "внешние" резюме и вакансии
+			$table->unsignedInteger('filial_id')->nullable(); // Код филиала
+			$table->enum('type',['LocalAdmin','GlobalAdmin','LocalOperator','GlobalOperator']); // Пояснение ниже
 			$table->string('surname')->nullable(); // Фамилия
 			$table->string('name')->nullable(); // Имя
 			$table->string('fathersname')->nullable(); // Отчество 
@@ -29,9 +29,10 @@ class CreateOperatorsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+    LocalAdmin - Доступ к записям своего филиала, также может добавлять операторов в свой филиал
+	GlobalAdmin - Доступ к записям всех филиалов, может добавлять операторов и администраторов 
+	LocalOperator - Доступ только к локальным записям
+	GlobalOperator - Доступ ко всем записям
      */
     public function down()
     {

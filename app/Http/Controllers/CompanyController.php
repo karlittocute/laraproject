@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Company;
 use app\Http\Middleware\MiddlewareCompany;
 use DB;
+use App\ErrorsInCompany;
+use App\Filial;
 
 class CompanyController extends Controller
 {
@@ -23,8 +25,11 @@ class CompanyController extends Controller
 	
     public function index()
     {
-        $companies = DB::table('companies')->get();
-        return view('pages.company', compact('companies'));
+        /* 
+		$companies = DB::table('companies')->get();
+        return view('pages.company.company', compact('companies'));
+		*/
+		return view('pages.company.company', ['companies'=> Company::paginate(7)]);
     }
 
     /**
@@ -34,7 +39,8 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('pages.createCompany');
+		$filial = Filial::orderBy('updated_at', 'desc')->get();
+        return view('pages.company.create_company', compact('filial'));
     }
 
     /**
@@ -62,7 +68,7 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
 		//DB::table('companies')->find($id);
-        return view ('pages.showCompany', compact('company'));
+        return view ('pages.company.show_company', compact('company'));
     }
 
     /**
@@ -73,7 +79,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $filial = Filial::orderBy('updated_at', 'desc')->get();
+		$company = Company::find($id);
+        return view('pages.company.edit_company', compact('company','filial'));
     }
 
     /**
@@ -85,7 +93,13 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->except(['_token','_method']);
+		$company =  Company::find($id);
+		$company->fill($data);
+		$company->active = 0;
+		$company->save();
+		
+		return redirect()->action('CompanyController@show', ['id' => $id]);
     }
 
     /**
@@ -96,6 +110,15 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+		$company = Company::find($id);
+		$company->delete();
+		return redirect('/company');
+        /**
+		$company = Company::find($id);
+		$company->active = 0;
+		$company->public = 1;
+		$company->save();
+		return redirect()->action('CompanyController@index');
+		**/
     }
 }

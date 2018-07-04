@@ -17,38 +17,38 @@ class CreateResumesTable extends Migration
       Schema::create('resumes', function (Blueprint $table) {
 		
       $table->increments('id');  // Идентификатор резюме
-			$table->unsignedInteger('filialId')->nullable(); // Код филиала
-			$table->unsignedInteger('operatorId')->nullable(); // Код оператора
+			$table->unsignedInteger('filial_id')->nullable(); // Код филиала
+			$table->unsignedInteger('operator_id')->nullable(); // Код оператора
 			
 			// Информация о соискателе
 			$table->string('name')->nullable(); // Фамилия имя отчество пользователя
 			$table->string('user_id')->nullable();// Идентификатор пользователя 
-			$table->unsignedTinyInteger('sex')->nullable(); // Пол 
+			$table->unsignedTinyInteger('sex')->default(0); // Пол 
 			$table->date('bDay')->nullable(); // Дата рождения
-			$table->unsignedInteger('cityId')->nullable(); // Идентификатор город
+			$table->string('city')->nullable(); // Идентификатор город
 			$table->string('region')->nullable(); // Район проживания
 			$table->string('phone')->nullable(); // Телефон
 			$table->string('citizenship')->nullable(); // Гражданство
-			$table->unsignedTinyInteger('visa')->nullable();  // Прописка
+			$table->unsignedTinyInteger('visa')->default(0);  // Прописка
 			
 			// Основное профессиональное образование
 			$table->string('edu1Name')->nullable(); // Название уч. заведения 1
 			$table->string('edu1Spec')->nullable(); // Специальность
-			$table->unsignedTinyInteger('edu1Field')->nullable(); // Область
+			$table->unsignedTinyInteger('edu1Field')->default(0); // Область
 			$table->text('edu1FieldText')->nullable(); // Уточнение области
-			$table->unsignedTinyInteger('edu1Degree')->nullable(); //  Степень
+			$table->unsignedTinyInteger('edu1Degree')->default(0); //  Степень
 			$table->string('edu1Year')->nullable(); //  Год окончания
-			$table->unsignedTinyInteger('edu1Form')->nullable(); // Форма обучения
+			$table->unsignedTinyInteger('edu1Form')->default(0); // Форма обучения
 			
 			//Дополнительное профессиональное образование
 			$table->string('edu2Name')->nullable(); // Название уч. заведения 2
 			$table->string('edu2Spec')->nullable(); // Специальность
-			$table->unsignedTinyInteger('edu2Field')->nullable(); // Область
+			$table->unsignedTinyInteger('edu2Field')->default(0); // Область
 			$table->text('edu2FieldText')->nullable(); // Уточнение области
 			$table->string('edu2Year')->nullable(); // Год окончания
 			
 			// Дополнительные навыки
-			$table->unsignedTinyInteger('lang')->nullable(); // Язык
+			$table->unsignedTinyInteger('lang')->default(0); // Язык
 			$table->unsignedTinyInteger('langLevel')->nullable(); //  Уровень владения языком 
 			$table->unsignedTinyInteger('pcLevel')->nullable(); //  Уровень владения компьютером
 			$table->unsignedTinyInteger('driverLicense')->nullable(); // Водительское удостоверениe
@@ -57,20 +57,19 @@ class CreateResumesTable extends Migration
 			// Желаемая вакансия
 			$table->string('vacancy')->nullable(); //  Название вакасии, должность
 			$table->string('salary')->nullable(); // Зарплата в месяц от
-			$table->unsignedTinyInteger('vacancyField')->nullable(); // Область в которой будет вакансия
-			$table->unsignedTinyInteger('fieldMain')->nullable(); // Поместить в раздел (см. Область)
-			$table->unsignedTinyInteger('work')->nullable(); // Опыт работы
-			$table->unsignedTinyInteger('busy')->nullable(); // Занятость
-			$table->unsignedTinyInteger('schedule')->nullable(); // График работы
+			$table->unsignedTinyInteger('vacancyField')->default(0); // Область в которой будет вакансия
+			$table->unsignedTinyInteger('work')->default(0); // Опыт работы
+			$table->unsignedTinyInteger('busy')->default(0); // Занятость
+			$table->unsignedTinyInteger('schedule')->default(0); // График работы
 			$table->string('scheduleText')->nullable(); //  График работы (текст)
 			$table->text('workExp')->nullable(); // Опыт работы
 			
 			//Прочие поля (не заполняются соискателем):
 			$table->timestamps();  // Дата заполнения / Дата изменения
 			$table->timestamp('resumeLifetime')->nullable();  // Время жизни резюме
-			$table->unsignedTinyInteger('active')->default(0); // Статус резюме
+			$table->unsignedTinyInteger('active')->default(1); // Статус резюме
 			$table->boolean('contact')->default(1); // Контакт через оператора
-			$table->boolean('public')->default(1); //  Если значение равно 1, значит запись нуждается в проверке оператором
+			$table->boolean('public')->default(0); //  Если значение равно 1, значит запись нуждается в проверке оператором
         });
     }
 
